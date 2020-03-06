@@ -3,8 +3,17 @@ import logo from './logo.svg';
 import './App.css';
 import { connect } from 'react-redux';
 import * as contactAction from './actions/contactAction';
+import Grid from '@material-ui/core/Grid';
+import Button from '@material-ui/core/Button';
+import Box from '@material-ui/core/Box';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import EditIcon from '@material-ui/icons/Edit';
+import DeleteIcon from '@material-ui/icons/Delete';
 
-class List extends React.Component {
+class ContactList extends React.Component {
   constructor(props){
     super(props);
 
@@ -24,28 +33,28 @@ class List extends React.Component {
 
   listView(data, index){
     return (
-        <div className="row">
-          <div className="col-md-10">
-            <li className="list-group-item clearfix">
-              Name : {data.name}<br/>
+        <ListItem>
+            <ListItemText>
+              Name : {data.name}
+            </ListItemText>
+            <ListItemText>
               Age : {data.age}
-            </li>
-          </div>
-          <div>
-             <button onClick={(e) => this.editContact(e, {
-              id: index,
-              name: data.name,
-              age: data.age
-             })}>
+            </ListItemText>
+            <ListItemIcon>
+              <EditIcon onClick={(e) => this.editContact(e, {
+                id: index,
+                name: data.name,
+                age: data.age
+              })}>
                Update
-            </button>
-          </div>
-          <div className="col-md-2">
-            <button onClick={(e) => this.deleteContact(e, index)} className="btn btn-danger">
+            </EditIcon>
+            </ListItemIcon>
+            <ListItemIcon>
+            <DeleteIcon onClick={(e) => this.deleteContact(e, index)} className="btn btn-danger">
               Remove
-            </button>
-          </div>
-        </div>
+            </DeleteIcon>
+            </ListItemIcon>
+        </ListItem>
     )   
   }
 
@@ -64,14 +73,14 @@ class List extends React.Component {
   
   render() {
       return (
-      <div>
+      <Grid>
       { this.props.contacts.list.length === 0 ? (<p>No data</p>) : (
-        <ul className="list-group">
+        <List className="list-group">
           {this.props.contacts.list.map((contact, i) => this.listView(contact, i))}
-        </ul>
+        </List>
         ) 
       }
-      </div>
+      </Grid>
     )
   }
 }
@@ -88,4 +97,4 @@ const mapDispatchToProps = (dispatch) => {
     deleteContact: index => dispatch(contactAction.deleteContact(index))
   }
 };
-export default connect(mapStateToProps, mapDispatchToProps)(List);
+export default connect(mapStateToProps, mapDispatchToProps)(ContactList);

@@ -3,7 +3,9 @@ import logo from './logo.svg';
 import './App.css';
 import { connect } from 'react-redux';
 import * as contactAction from './actions/contactAction';
-
+import Button from '@material-ui/core/Button';
+import Input from '@material-ui/core/Input';
+import Box from '@material-ui/core/Box';
 class New extends React.Component {
   constructor(props){
     super(props);
@@ -63,27 +65,35 @@ class New extends React.Component {
       return (
       <div>
       <form>
+        <Box mb={1}>
         <label>
-          Name: 
+        <Box mr={4}>
+          Name:
+        </Box>
            {
               !this.props.contacts.current ? (
-                   <input type="text" value={this.state.name} onChange={this.handleChangeName}/>
+                   <Input type="text" value={this.state.name} onChange={this.handleChangeName}/>
                 ) : (
-                  <input type="text" value={this.state.name} onChange={this.handleChangeName}/>
+                  <Input type="text" value={this.state.name} onChange={this.handleChangeName}/>
                 )
             }
         </label>
         <label><br />
+          <Box mr={4}>
           Age:
+          </Box>
           {
               !this.props.contacts.current ? (
-                   <input type="text" value={this.state.age} onChange={this.handleChangeAge}/>
+                   <Input type="text" value={this.state.age} onChange={this.handleChangeAge}/>
                 ) : (
-                  <input type="text" value={this.state.age} onChange={this.handleChangeAge}/>
+                  <Input type="text" value={this.state.age} onChange={this.handleChangeAge}/>
                 )
             }
-        </label><br />
-        <input type="submit" value="Submit" onClick={this.handleSubmit}/>
+        </label>
+        </Box>
+        <Button variant="contained" color="primary" onClick={this.handleSubmit}>
+          Submit
+        </Button>
       </form>
       </div>
     )
