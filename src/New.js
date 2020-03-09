@@ -7,15 +7,15 @@ import Button from '@material-ui/core/Button';
 import Input from '@material-ui/core/Input';
 import Box from '@material-ui/core/Box';
 import moment from 'moment';
-import DatePicker from 'react-moment-datepicker';
-import "../../node_modules/react-moment-datepicker/lib/react-moment-datepicker";
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 class New extends React.Component {
   constructor(props){
     super(props);
     var contact;
-    this.state = {name: '', age: '', birthDate: ''};
+    this.state = {name: '', phone: '', birthdate: null};
     this.handleChangeName = this.handleChangeName.bind(this);
-    this.handleChangeAge = this.handleChangeAge.bind(this);
+    this.handleChangePhone = this.handleChangePhone.bind(this);
     this.handleChangeDate = this.handleChangeDate.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.setData = this.setData.bind(this);
@@ -30,22 +30,22 @@ class New extends React.Component {
     if(this.props.match.params.id){
       this.setState({
         name : this.props.location.state.name, 
-        age : this.props.location.state.age,
+        phone : this.props.location.state.phone,
         birthdate : this.props.location.state.birthdate
       })
     }
   }
 
-  setData(name, age){
-    this.setState({name: name, age: age});
+  setData(name, phone){
+    this.setState({name: name, phone: phone});
   }
 
   handleChangeName(event){
     this.setState({name: event.target.value});
   }
 
-  handleChangeAge(event){
-    this.setState({age: event.target.value});
+  handleChangePhone(event){
+    this.setState({phone: event.target.value});
   }
 
   handleChangeDate(date){
@@ -54,24 +54,24 @@ class New extends React.Component {
 
   handleSubmit(event){
     event.preventDefault();
-    let currentDate = moment(new Date()).format("dd-MM-YY");
-    let birthdate = this.state.birthdate
+    let currentDate = moment(new Date()).format("DD-MM-YY");
     let contact = {
       name: this.state.name,
-      age: this.state.age,
-      birthdate : birthdate.format('L'),
+      phone: this.state.phone,
+      date: this.state.birthdate,
+      birthdate: moment(this.state.birthdate).format("DD-MM-YY"),
       updated: currentDate
     }
+    console.log(contact)
     if(!this.props.match.params.id){
       contact.created = currentDate;
     } else {
       console.log(this.props.location.state.created);
       contact.created = this.props.location.state.created
     }
-    console.log(contact);
     this.setState({
       name: '',
-      age: ''
+      phone: ''
     });
     this.props.match.params.id ? 
     (this.props.updateContact(contact, this.props.match.params.id)) :
@@ -92,25 +92,13 @@ class New extends React.Component {
         <Box mr={4}>
           Name:
         </Box>
-           {
-              !this.props.contacts.current ? (
-                   <Input type="text" value={this.state.name} onChange={this.handleChangeName}/>
-                ) : (
-                  <Input type="text" value={this.state.name} onChange={this.handleChangeName}/>
-                )
-            }
+          <Input type="text" value={this.state.name} onChange={this.handleChangeName}/>
         </label>
         <label><br />
           <Box mr={4}>
-          Age:
+          Phone:
           </Box>
-          {
-              !this.props.contacts.current ? (
-                   <Input type="text" value={this.state.age} onChange={this.handleChangeAge}/>
-                ) : (
-                  <Input type="text" value={this.state.age} onChange={this.handleChangeAge}/>
-                )
-            }
+          <Input type="text" value={this.state.phone} onChange={this.handleChangePhone}/>
         </label>
         <label><br />
           <Box mr={4}>
@@ -121,16 +109,16 @@ class New extends React.Component {
               <DatePicker
               selected={this.state.birthdate}
               name="birthDate"
-              dateFormat="dd/MM/yyyy"
-              onChange={this.handleChangeDate}
+              dateFormat="dd-MM-yy"
+              onChange={date => this.handleChangeDate(date)}
             />
                 ) : (
                   <DatePicker
               selected={this.state.birthdate}
               name="birthDate"
               dateFormat="dd-MM-yy"
-              onChange={this.handleChangeDate}
-              />
+              onChange={date => this.handleChangeDate(date)}
+                />
                 )
             }
         </label>
