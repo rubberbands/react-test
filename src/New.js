@@ -6,17 +6,20 @@ import * as contactAction from './actions/contactAction';
 import Button from '@material-ui/core/Button';
 import Input from '@material-ui/core/Input';
 import Box from '@material-ui/core/Box';
+import moment from 'moment';
+import DatePicker from 'react-moment-datepicker';
+import "../../node_modules/react-moment-datepicker/lib/react-moment-datepicker";
 class New extends React.Component {
   constructor(props){
     super(props);
     var contact;
-    this.state = {name: '', age: ''};
-    
+    this.state = {name: '', age: '', birthDate: ''};
     this.handleChangeName = this.handleChangeName.bind(this);
     this.handleChangeAge = this.handleChangeAge.bind(this);
+    this.handleChangeDate = this.handleChangeDate.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.setData = this.setData.bind(this);
-
+    console.log(this.state.birthDate);
     if(this.props.match.params.id){
       console.log(this.props.location.state.name);
       
@@ -25,7 +28,11 @@ class New extends React.Component {
 
   componentDidMount(){
     if(this.props.match.params.id){
-      this.setState({name : this.props.location.state.name, age : this.props.location.state.age})
+      this.setState({
+        name : this.props.location.state.name, 
+        age : this.props.location.state.age,
+        birthdate : this.props.location.state.birthdate
+      })
     }
   }
 
@@ -41,12 +48,27 @@ class New extends React.Component {
     this.setState({age: event.target.value});
   }
 
+  handleChangeDate(date){
+    this.setState({birthdate: date});
+  }
+
   handleSubmit(event){
     event.preventDefault();
+    let currentDate = moment(new Date()).format("dd-MM-YY");
+    let birthdate = this.state.birthdate
     let contact = {
       name: this.state.name,
-      age: this.state.age
+      age: this.state.age,
+      birthdate : birthdate.format('L'),
+      updated: currentDate
     }
+    if(!this.props.match.params.id){
+      contact.created = currentDate;
+    } else {
+      console.log(this.props.location.state.created);
+      contact.created = this.props.location.state.created
+    }
+    console.log(contact);
     this.setState({
       name: '',
       age: ''
@@ -87,6 +109,28 @@ class New extends React.Component {
                    <Input type="text" value={this.state.age} onChange={this.handleChangeAge}/>
                 ) : (
                   <Input type="text" value={this.state.age} onChange={this.handleChangeAge}/>
+                )
+            }
+        </label>
+        <label><br />
+          <Box mr={4}>
+          Birthdate:
+          </Box>
+          {
+            !this.props.contacts.current ? (
+              <DatePicker
+              selected={this.state.birthdate}
+              name="birthDate"
+              dateFormat="dd/MM/yyyy"
+              onChange={this.handleChangeDate}
+            />
+                ) : (
+                  <DatePicker
+              selected={this.state.birthdate}
+              name="birthDate"
+              dateFormat="dd-MM-yy"
+              onChange={this.handleChangeDate}
+              />
                 )
             }
         </label>

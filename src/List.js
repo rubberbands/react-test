@@ -40,11 +40,21 @@ class ContactList extends React.Component {
             <ListItemText>
               Age : {data.age}
             </ListItemText>
+            <ListItemText>
+              Birthdate : {data.birthdate}
+            </ListItemText>
+            <ListItemText>
+              Created : {data.created}
+            </ListItemText>
+            <ListItemText>
+              Last Updated : {data.updated}
+            </ListItemText>
             <ListItemIcon>
               <EditIcon onClick={(e) => this.editContact(e, {
                 id: index,
                 name: data.name,
-                age: data.age
+                age: data.age,
+                created: data.created
               })}>
                Update
             </EditIcon>
@@ -62,7 +72,7 @@ class ContactList extends React.Component {
       console.log(contact);
       this.props.history.push({
         pathname : "/edit/"+contact.id,
-        state : {name : contact.name, age :  contact.age}
+        state : {name : contact.name, age : contact.age, birthdate : contact.birthdate, created : contact.created}
       });
    }
 
